@@ -1,22 +1,27 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys,simplejson,urllib,urllib2,logging
+import sys
+import simplejson
+import urllib
+import urllib2
+import logging
 
 class Lingr(object):
 
     __URL_BASE__ = 'http://lingr.com/api/'
-    __URL_BASE_OBSERVE__ = "http://lingr.com:8080/api/"
 
-    def __init__(self, user, password):
+    def __init__(self, user, password, apikey = ""):
         self.user = user
         self.password = password
+        self.apikey = apikey
         self.counter = 0
         
     def create_session(self):
         data = self.post('session/create',{
             'user':self.user,
-            'password':self.password
+            'password':self.password,
+            'api_key':self.apikey
             })
         if data:
             self.session = data['session']
@@ -81,7 +86,7 @@ class Lingr(object):
     def get_url(self,path):
         url = self.__URL_BASE__
         if path == 'event/observe':
-            url = self.__URL_BASE_OBSERVE__
+            url = self.__URL_BASE__
         return url + path
     
     def get_opener(self):
